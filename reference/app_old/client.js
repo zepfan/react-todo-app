@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
-import App from './TodoApp';
+import App from './components/App';
 
 const app = document.getElementById('app');
 

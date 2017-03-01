@@ -1,0 +1,52 @@
+#todo-container {
+	margin: 2em 0 0;
+
+	ul {
+		border-top: 1px solid #999;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		li {
+			border-bottom: 1px solid #999;
+			margin-top: 1em;
+			padding-bottom: 1em;
+
+			.todo-auxiliary {
+				overflow: hidden;
+
+				.todo-date {
+					font-weight: 300;
+					font-size: 0.8em;
+					color: #888;
+					float: left;
+				}
+
+				.todo-actions {
+					float: right;
+
+					span {
+						display: inline-block;
+						margin-right: 10px;
+						color: #888;
+						font-size: 0.8em;
+						cursor: pointer;
+					}
+				}
+			}
+
+			.todo-text {
+				clear: both;
+				display: block;
+				margin: 7px 0 0;
+				font-size: 1.1em;
+				cursor: pointer;
+
+				input {
+					position: relative;
+					top: -2px;
+				}
+			}
+		}
+	}
+}
