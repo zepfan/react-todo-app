@@ -5,8 +5,7 @@ class TodoStore extends EventEmitter {
 	constructor() {
 		super();
 
-		// Dummy/placeholder data. This would obviously come from
-		// some backend service/datastore in a real world example.
+		// Starting data (this would come from some backend service)
 		this.todos = [
 			{
 				id: 48292844,
@@ -37,13 +36,46 @@ class TodoStore extends EventEmitter {
 		return this.todos;
 	}
 
+	/**
+	 * Create a new todo
+	 */
+	
+	createTodo(text) {
+		const id = Date.now(), // mostly random number that is good enough for this demo
+			timeStamp = 'Feb 28, 10:00pm', // will come back to this later to parse a legit timestamp
+			completed = false;
+
+		this.todos.push({
+			id,
+			text,
+			timeStamp,
+			completed
+		});
+
+		this.emit('change');
+	}
 
 	/**
-	 * Route events to the appropriate the methods
+	 * Delete a todo
 	 */
 
-	handleActions() {
-		// dispatcher stuff here
+	 deleteTodo(id) {
+	 	console.log('deleting', id);
+	 }
+
+	/**
+	 * Direct events to the appropriate methods
+	 */
+
+	handleActions(action) {
+		switch(action.type) {
+			case 'CREATE_TODO': {
+				this.createTodo(action.text);
+			}
+			case 'DELETE_TODO': {
+				this.deleteTodo(action.id);
+			}
+		}
 	}
 }
 

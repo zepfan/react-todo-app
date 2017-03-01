@@ -9,7 +9,7 @@ class TodoItem extends Component {
     				
     				<div class="todo-actions">
     					<span class="edit-todo">Edit</span>
-    					<span class="delete-todo">Delete</span>
+    					<span onClick={this.props.deleteTodo} data-id={this.props.id} class="delete-todo">Delete</span>
     				</div>
     			</div>
 
