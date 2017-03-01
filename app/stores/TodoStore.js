@@ -1,48 +1,46 @@
 import { EventEmitter } from 'events';
 import dispatcher from '../dispatcher';
 
+import '../demoData';
+
 class TodoStore extends EventEmitter {
 	constructor() {
 		super();
 
-		// Starting data (this would come from some backend service)
-		this.todos = [
-			{
-				id: 48292844,
-				text: 'Here is your first todo!',
-				timeStamp: 'Feb 28, 5:00pm',
-				completed: false
-			},
-			{
-				id: 48292845,
-				text: 'Here\'s another placeholder',
-				timeStamp: 'Feb 28, 5:00pm',
-				completed: false
-			},
-			{
-				id: 48292834,
-				text: 'Aaaaaaand one more',
-				timeStamp: 'Feb 28, 5:00pm',
-				completed: true
-			},
-		];
+		// First batch of data comes from `demoData.js`
+		this.todos = JSON.parse(localStorage.getItem('todos'));
+	} 
+
+	/**
+	 * ----------------------------------------
+	 * Updates the localStorage object & emits a change event
+	 * ----------------------------------------
+	 */
+
+	updateStore(data) {
+		localStorage.setItem('todos', JSON.stringify(data));
+		this.emit('change');
 	}
 
 	/**
+	 * ----------------------------------------
 	 * Return all the todo entries
+	 * ----------------------------------------
 	 */
-	
+
 	getAll() {
 		return this.todos;
 	}
 
 	/**
+	 * ----------------------------------------
 	 * Create a new todo
+	 * ----------------------------------------
 	 */
-	
+
 	createTodo(text) {
-		const id = Date.now(), // mostly random number that is good enough for this demo
-			timeStamp = 'Feb 28, 10:00pm', // will come back to this later to parse a legit timestamp
+		const id = Date.now(), // placeholder
+			timeStamp = 'Feb 28, 10:00pm', // placeholder
 			completed = false;
 
 		this.todos.push({
@@ -52,29 +50,54 @@ class TodoStore extends EventEmitter {
 			completed
 		});
 
-		this.emit('change');
+		this.updateStore(this.todos);
 	}
 
 	/**
+	 * ----------------------------------------
 	 * Delete a todo
+	 * ----------------------------------------
 	 */
 
-	 deleteTodo(id) {
-	 	console.log('deleting', id);
-	 }
+	deleteTodo(id) {
+		let todo = this.todos.find(x => x.id == id);
+		let index = this.todos.indexOf(todo);
+		
+		this.todos.splice(index, 1);
+
+		this.updateStore(this.todos);
+	}
 
 	/**
+	 * ----------------------------------------
+	 * Update a todo's status
+	 * ----------------------------------------
+	 */
+
+	changeTodoStatus(id, status) {
+		let todo = this.todos.find(x => x.id == id);
+		todo.completed = status;
+
+		this.updateStore(this.todos);
+	}
+
+	/**
+	 * ----------------------------------------
 	 * Direct events to the appropriate methods
+	 * ----------------------------------------
 	 */
 
 	handleActions(action) {
 		switch(action.type) {
-			case 'CREATE_TODO': {
+			case 'CREATE_TODO':
 				this.createTodo(action.text);
-			}
-			case 'DELETE_TODO': {
+				break;
+			case 'DELETE_TODO':
 				this.deleteTodo(action.id);
-			}
+				break;
+			case 'CHANGE_TODO_STATUS':
+				this.changeTodoStatus(action.id, action.status);
+				break;
 		}
 	}
 }

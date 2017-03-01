@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class TodoItem extends Component {
 	render() {
 		return (
-			<li data-id={this.props.id}>
+			<li>
 				<div class="todo-auxiliary">
 					<span class="todo-date">{this.props.timeStamp}</span>
     				
@@ -14,8 +14,12 @@ class TodoItem extends Component {
     			</div>
 
 				<span class="todo-text">
-					<input type="checkbox" defaultChecked={this.props.completed ? 'checked' : ''} />
-					{this.props.text}
+					<input 
+						onChange={this.props.changeTodoStatus} 
+						type="checkbox" 
+						id={this.props.id} 
+						defaultChecked={this.props.completed ? 'checked' : ''} />
+					<label for={this.props.id} >{this.props.text}</label>
 				</span>
 			</li>
 		)

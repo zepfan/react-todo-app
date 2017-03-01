@@ -13,3 +13,11 @@ export function deleteTodo(id) {
 		id
 	});
 }
+
+export function changeTodoStatus(id, status) {
+	dispatcher.dispatch({
+		type: 'CHANGE_TODO_STATUS',
+		id,
+		status
+	});
+}

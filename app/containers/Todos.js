@@ -17,16 +17,18 @@ class Todos extends Component {
 			newTodo: ''
 		}
 
-		// bind everything ahead of time
+		// bind methods ahead of time
 		this.getTodos = this.getTodos.bind(this);
 		this.createTodo = this.createTodo.bind(this);
 		this.setTodoText = this.setTodoText.bind(this);
 		this.deleteTodo = this.deleteTodo.bind(this);
+		this.changeTodoStatus = this.changeTodoStatus.bind(this);
 	}
 
 	/**
-	 * Update the `todos` as the stey change
-	 * in the store
+	 * ----------------------------------------
+	 * Update when the store does
+	 * ----------------------------------------
 	 */
 
 	componentWillMount() {
@@ -44,8 +46,9 @@ class Todos extends Component {
 	}
 
 	/**
-	 * Sends the `newTodo` entry to the 
-	 * createTodo action to add a new entry
+	 * ----------------------------------------
+	 * Sends `newTodo` state to the createTodo action
+	 * ----------------------------------------
 	 */
 
 	createTodo() {
@@ -53,8 +56,9 @@ class Todos extends Component {
 	}
 
 	/**
-	 * Updates the `newTodo` entry in state
-	 * as the user types in the input field
+	 * ----------------------------------------
+	 * Updates `newTodo` state as input changes
+	 * ----------------------------------------
 	 */
 
 	setTodoText(e) {
@@ -64,18 +68,33 @@ class Todos extends Component {
 	}
 
 	/**
-	 * Delete a todo from the store based
-	 * on the ID
+	 * ----------------------------------------
+	 * Sends a todo `id` to the deleteTodo action
+	 * ----------------------------------------
 	 */
 	
 	deleteTodo(e) {
 		TodoActions.deleteTodo(e.target.getAttribute('data-id'));
 	}
 
+	/**
+	 * ----------------------------------------
+	 * Sends a todo `status` and `id` to changeTodoStatus action
+	 * ----------------------------------------
+	 */
+
+	changeTodoStatus(e) {
+		let id = e.target.getAttribute('id');
+		let status = e.target.checked;
+
+		TodoActions.changeTodoStatus(id, status);
+	}
+
 	render() {
 		// do some .map magic
 		const TodoItems = this.state.todos.map((todo) => {
-			return <TodoItem key={todo.id} {...todo} />;
+			return <TodoItem 
+						key={todo.id} {...todo} deleteTodo={this.deleteTodo} changeTodoStatus={this.changeTodoStatus} />;
 		});
 
 		return (
@@ -83,8 +102,8 @@ class Todos extends Component {
 				<AddTodoForm 
 					createTodo={this.createTodo}
 					setTodoText={this.setTodoText}
-					deleteTodo={this.deleteTodo}
 				/>
+				
 				<FilterTodos />
 
 				<div id="todo-container">
