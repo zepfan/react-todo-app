@@ -8,12 +8,16 @@ class Todos extends Component {
 	constructor() {
 		super();
 
+		// Bring in the default/placeholder `todos` array from
+		// the store
 		this.state = {
 			todos: todoStore.getAll()
 		}
 	}
 
 	render() {
+		// Dynamicallly create the individual <TodoItem /> components
+		// by mapping the `todos` in as props
 		const { todos } = this.state;
 
 		const TodoItems = todos.map((todo) => {

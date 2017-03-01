@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 
 import AddTodo from './components/AddTodo';
-import FilterTodo from './components/FilterTodo';
+import FilterTodos from './components/FilterTodos';
 import Todos from './components/Todos';
 
-class App extends Component {
+class TodoApp extends Component {
   render() {
     return (
     	<div>
-	    	<header>
-	    		<AddTodo />
-	    		<FilterTodo />
-	    	</header>
-
+	    	<AddTodo />
+	    	<FilterTodos />
 	    	<Todos />
 	    </div>
     )
   }
 }
 
-export default App;
+export default TodoApp;

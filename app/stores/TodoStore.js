@@ -5,34 +5,29 @@ class TodoStore extends EventEmitter {
 	constructor() {
 		super();
 
-		/**
-		 * Starting with some dummy/placeholder data.
-		 * This would obviously come from some backend service in
-		 * a real world example.
-		 */
-		
+		// Dummy/placeholder data. This would obviously come from
+		// some backend service/datastore in a real world example.
 		this.todos = [
 			{
 				id: 48292844,
 				text: 'Here is your first todo!',
-				timeStamp: 'Feb 28',
+				timeStamp: 'Feb 28, 5:00pm',
 				completed: false
 			},
 			{
 				id: 48292845,
 				text: 'Here\'s another placeholder',
-				timeStamp: 'Feb 28',
+				timeStamp: 'Feb 28, 5:00pm',
 				completed: false
 			},
 			{
 				id: 48292834,
 				text: 'Aaaaaaand one more',
-				timeStamp: 'Feb 28',
+				timeStamp: 'Feb 28, 5:00pm',
 				completed: true
 			},
 		];
 	}
-
 
 	/**
 	 * Return all the todo entries
