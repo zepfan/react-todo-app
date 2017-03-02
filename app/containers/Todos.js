@@ -6,6 +6,7 @@ import todoStore from '../stores/TodoStore';
 
 import AddTodoForm from '../components/AddTodoForm';
 import TodoItem from '../components/TodoItem';
+import Modal from '../components/Modal';
 
 class Todos extends Component {
 	constructor(props) {
@@ -14,7 +15,8 @@ class Todos extends Component {
 		this.state = {
 			todos: todoStore.getAll(),
 			newTodo: '',
-			editId: null
+			editId: null,
+			isModalOpen: false
 		}
 
 		// bind methods ahead of time
@@ -25,10 +27,12 @@ class Todos extends Component {
 		this.saveTodo = this.saveTodo.bind(this);
 		this.deleteTodo = this.deleteTodo.bind(this);
 		this.changeTodoStatus = this.changeTodoStatus.bind(this);
+		this.openModal = this.openModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 
-	/** ================ INITIALIZATION =========================== */
+	/** ================ LIFECYCLE =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -45,13 +49,11 @@ class Todos extends Component {
 	}
 
 	getTodos() {
-		this.setState({
-			todos: todoStore.getAll()
-		});
+		this.setState({ todos: todoStore.getAll() });
 	}
 
 
-	/** ================ COMPONENT METHODS =========================== */
+	/** ================ METHODS =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -64,9 +66,7 @@ class Todos extends Component {
 		if(this.state.newTodo) {
 			TodoActions.createTodo(this.state.newTodo);
 
-			this.setState({
-				newTodo: ''
-			});
+			this.setState({ newTodo: '' });
 		} else {
 			alert('Please enter a todo!');
 		}
@@ -79,9 +79,7 @@ class Todos extends Component {
 	 */
 
 	setTodoText(e) {
-		this.setState({
-			newTodo: e.target.value
-		});
+		this.setState({ newTodo: e.target.value });
 	}
 
 	/**
@@ -93,9 +91,7 @@ class Todos extends Component {
 	editTodo(e) {
 		let id = e.target.getAttribute('data-id');
 		
-		this.setState({
-			editId: id
-		});
+		this.setState({ editId: id });
 	}
 
 	/**
@@ -108,9 +104,7 @@ class Todos extends Component {
 	saveTodo(text) {
 		TodoActions.saveTodo(this.state.editId, text);
 
-		this.setState({
-			editId: null
-		});
+		this.setState({ editId: null });
 	}
 
 	/**
@@ -135,7 +129,16 @@ class Todos extends Component {
 		let id = e.target.getAttribute('id');
 		let status = e.target.checked;
 
-		TodoActions.changeTodoStatus(id, status);
+		TodoActions.changeTodoStatus(id, status);;
+	}
+
+
+	openModal() {
+		this.setState({ isModalOpen: true });
+	}
+
+	closeModal() {
+		this.setState({ isModalOpen: false });
 	}
 
 
@@ -149,7 +152,6 @@ class Todos extends Component {
 		 * `TodoItem` components
 		 * ----------------------------------------
 		 */
-		
 		const TodoItems = this.state.todos.map((todo) => {
 			return <TodoItem 
 						key={todo.id} 
@@ -165,16 +167,50 @@ class Todos extends Component {
 
 		return (
 			<div>
+				{/* Add New Todo Form */}
 				<AddTodoForm 
 					createTodo={this.createTodo} 
 					setTodoText={this.setTodoText} 
 				/>
 
+				{/* Open Modal button */}
+				<button 
+					onClick={this.openModal} 
+					class="open-modal"
+				>
+					Try out this nifty modal!
+				</button>
+
+				{/* Main todo list*/}
 				<div id="todo-container">
 					<ul>
 						{TodoItems}
 					</ul>
 				</div>
+
+				{/* Test Modal */}
+				<Modal 
+					isOpen={this.state.isModalOpen}
+					transitionName="modal-anim"
+				>
+					<div class="modal-interior">
+						<div class="modal-body">
+							<h2>This is my Modal</h2>
+							<h3>There are many like it, but this one is mine.</h3>
+
+							<p>Just testing out a modal implementation. Nothing more to see here.</p>
+						</div>
+
+						<button 
+							onClick={this.closeModal} 
+							class="close-btn"
+						>
+							Close Modal
+						</button>
+					</div>
+				</Modal>
+
+
 			</div>
 		)
 	}

@@ -4,12 +4,20 @@ class AddTodoForm extends Component {
 	constructor(props) {
 		super(props);
 
+		// binding methods ahead of time
 		this.handleEvent = this.handleEvent.bind(this);
 		this.clearInput = this.clearInput.bind(this);
 	}
 
 
-	/** ================ COMPONENT METHODS =========================== */
+	/** ================ METHODS =========================== */
+
+	/**
+	 * ----------------------------------------
+	 * Submit the todo if they either click
+	 * a button or hit "Enter"
+	 * ----------------------------------------
+	 */
 
 	handleEvent(e) {
 		if(e.type == 'click' || e.keyCode == 13) {
@@ -18,6 +26,12 @@ class AddTodoForm extends Component {
 		}
 	}
 
+	/**
+	 * ----------------------------------------
+	 * Reset the input's value
+	 * ----------------------------------------
+	 */
+	
 	clearInput() {
 		this.refs.add_todo_input.value = '';
 	}

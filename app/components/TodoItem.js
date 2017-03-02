@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
 class TodoItem extends Component {
+	constructor() {
+		super();
+	}
 
 	/** ================ LIFECYCLE =========================== */
 
@@ -11,14 +14,20 @@ class TodoItem extends Component {
 	}
 
 
-	/** ================ COMPONENT METHODS =========================== */	
+	/** ================ METHODS =========================== */	
+
+	/**
+	 * ----------------------------------------
+	 * Submit the todo if the "Enter" key
+	 * is pressed
+	 * ----------------------------------------
+	 */
 
 	handleKeyUp(e) {
-		if(e.keyCode == 13) { // "Enter" key
+		if(e.keyCode == 13) {
 			this.props.saveTodo(e.target.value);
 		}
 	}
-
 
 	/** ================ RENDER =========================== */
 
@@ -28,6 +37,8 @@ class TodoItem extends Component {
 		 * ----------------------------------------
 		 * Determine if this component is currently
 		 * in edit mode
+		 *
+		 * (this bit is pretty ugly)
 		 * ----------------------------------------
 		 */
 		

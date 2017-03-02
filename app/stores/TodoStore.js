@@ -12,7 +12,7 @@ class TodoStore extends EventEmitter {
 	} 
 
 
-	/** ================ HELPER METHODS =========================== */
+	/** ================ HELPERS =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -66,7 +66,7 @@ class TodoStore extends EventEmitter {
 	}
 
 
-	/** ================ ACTION METHODS =========================== */
+	/** ================ `ACTION` METHODS =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -79,7 +79,8 @@ class TodoStore extends EventEmitter {
 			timeStamp = this.createTimestamp(),
 			completed = false;
 
-		this.todos.push({
+		// put new todo at the beginning of the array
+		this.todos.unshift({
 			id,
 			text,
 			timeStamp,
@@ -131,7 +132,7 @@ class TodoStore extends EventEmitter {
 	}
 
 
-	/** ================ DISPATCHER JAZZ =========================== */
+	/** ================ HANDLE DISPATCHER =========================== */
 
 	handleActions(action) {
 		switch(action.type) {
