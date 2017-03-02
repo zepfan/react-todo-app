@@ -5,6 +5,8 @@ Simple CRUD application to get familiar with React
 1. Clone repo
 2. `npm install`
 3. `npm run dev`
+4. Navigate to `localhost:8080`
+5. :thumbsup:
 
 ## Features:
 - Reads and saves todos via `localStorage`
