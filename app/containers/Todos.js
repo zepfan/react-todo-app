@@ -132,10 +132,21 @@ class Todos extends Component {
 		TodoActions.changeTodoStatus(id, status);;
 	}
 
-
+	/**
+	 * ----------------------------------------
+	 * Set the 'isModalOpen' state to true
+	 * ----------------------------------------
+	 */
+	
 	openModal() {
 		this.setState({ isModalOpen: true });
 	}
+
+	/**
+	 * ----------------------------------------
+	 * Set the 'isModalOpen' state to false
+	 * ----------------------------------------
+	 */
 
 	closeModal() {
 		this.setState({ isModalOpen: false });
