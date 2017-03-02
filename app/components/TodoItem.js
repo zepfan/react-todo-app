@@ -76,19 +76,19 @@ class TodoItem extends Component {
 			<li class={this.props.completed ? 'completed' : ''}>
 				<div class="todo-auxiliary">
 					<span class="todo-date">{this.props.timeStamp}</span>
-    				
-    				<div class="todo-actions">
-    					<span 
-    						onClick={this.props.editTodo}
-    						data-id={this.props.id}
-    						class="edit-todo">Edit</span>
+					
+					<div class="todo-actions">
+						<span 
+							onClick={this.props.editTodo}
+							data-id={this.props.id}
+							class="edit-todo">Edit</span>
 
-    					<span 
-    						onClick={this.props.deleteTodo} 
-    						data-id={this.props.id} 
-    						class="delete-todo">Delete</span>
-    				</div>
-    			</div>
+						<span 
+							onClick={this.props.deleteTodo} 
+							data-id={this.props.id} 
+							class="delete-todo">Delete</span>
+					</div>
+				</div>
 
 				<span class="todo-text">
 					{element}
