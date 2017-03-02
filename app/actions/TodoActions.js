@@ -7,6 +7,14 @@ export function createTodo(text) {
 	});
 }
 
+export function saveTodo(id, text) {
+	dispatcher.dispatch({
+		type: 'SAVE_TODO',
+		id,
+		text
+	});
+}
+
 export function deleteTodo(id) {
 	dispatcher.dispatch({
 		type: 'DELETE_TODO',

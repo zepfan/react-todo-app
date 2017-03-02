@@ -9,21 +9,27 @@ import FilterTodos from '../components/FilterTodos';
 import TodoItem from '../components/TodoItem';
 
 class Todos extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
 		this.state = {
 			todos: todoStore.getAll(),
-			newTodo: ''
+			newTodo: '',
+			editId: null
 		}
 
 		// bind methods ahead of time
 		this.getTodos = this.getTodos.bind(this);
 		this.createTodo = this.createTodo.bind(this);
 		this.setTodoText = this.setTodoText.bind(this);
+		this.editTodo = this.editTodo.bind(this);
+		this.saveTodo = this.saveTodo.bind(this);
 		this.deleteTodo = this.deleteTodo.bind(this);
 		this.changeTodoStatus = this.changeTodoStatus.bind(this);
 	}
+
+
+	/** ================ INITIALIZATION JAZZ =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -45,14 +51,26 @@ class Todos extends Component {
 		});
 	}
 
+
+	/** ================ COMPONENT METHODS =========================== */
+
 	/**
 	 * ----------------------------------------
-	 * Sends `newTodo` state to the createTodo action
+	 * Sends `newTodo` state to the createTodo 
+	 * action
 	 * ----------------------------------------
 	 */
 
 	createTodo() {
-		TodoActions.createTodo(this.state.newTodo);
+		if(this.state.newTodo) {
+			TodoActions.createTodo(this.state.newTodo);
+
+			this.setState({
+				newTodo: ''
+			});
+		} else {
+			alert('Please enter a todo!');
+		}
 	}
 
 	/**
@@ -69,7 +87,42 @@ class Todos extends Component {
 
 	/**
 	 * ----------------------------------------
-	 * Sends a todo `id` to the deleteTodo action
+	 * Update the `editId` state when called
+	 * ----------------------------------------
+	 */
+	
+	editTodo(e) {
+		let id = e.target.getAttribute('data-id');
+		
+		this.setState({
+			editId: id
+		});
+	}
+
+	/**
+	 * ----------------------------------------
+	 * Save an edited todo once "Enter" is
+	 * pressed
+	 * ----------------------------------------
+	 */
+	
+	saveTodo(e) {
+		let id = this.state.editId;
+		let text = e.target.value
+
+		if(e.keyCode == 13) { // "Enter" key
+			TodoActions.saveTodo(id, text);
+
+			this.setState({
+				editId: null
+			});
+		}
+	}
+
+	/**
+	 * ----------------------------------------
+	 * Sends a todo `id` to the deleteTodo 
+	 * action
 	 * ----------------------------------------
 	 */
 	
@@ -79,7 +132,8 @@ class Todos extends Component {
 
 	/**
 	 * ----------------------------------------
-	 * Sends a todo `status` and `id` to changeTodoStatus action
+	 * Sends a todo `status` and `id` to 
+	 * changeTodoStatus action
 	 * ----------------------------------------
 	 */
 
@@ -90,19 +144,27 @@ class Todos extends Component {
 		TodoActions.changeTodoStatus(id, status);
 	}
 
+
+	/** ================ RENDER FUNCTION =========================== */
+
 	render() {
 		// do some .map magic
 		const TodoItems = this.state.todos.map((todo) => {
 			return <TodoItem 
-						key={todo.id} {...todo} deleteTodo={this.deleteTodo} changeTodoStatus={this.changeTodoStatus} />;
+						key={todo.id} 
+						{...todo} 
+						timeStamp={todo.timeStamp.formatted}
+						editing={this.state.editId}
+						deleteTodo={this.deleteTodo} 
+						editTodo={this.editTodo}
+						saveTodo={this.saveTodo}
+						changeTodoStatus={this.changeTodoStatus} 
+					/>;
 		});
 
 		return (
 			<div>
-				<AddTodoForm 
-					createTodo={this.createTodo}
-					setTodoText={this.setTodoText}
-				/>
+				<AddTodoForm createTodo={this.createTodo} setTodoText={this.setTodoText} />
 				
 				<FilterTodos />
 

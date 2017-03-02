@@ -7,20 +7,12 @@ class TodoStore extends EventEmitter {
 	constructor() {
 		super();
 
-		// First batch of data comes from `demoData.js`
+		// First batch of data comes from `demoData.js` (imported above)
 		this.todos = JSON.parse(localStorage.getItem('todos'));
 	} 
 
-	/**
-	 * ----------------------------------------
-	 * Updates the localStorage object & emits a change event
-	 * ----------------------------------------
-	 */
 
-	updateStore(data) {
-		localStorage.setItem('todos', JSON.stringify(data));
-		this.emit('change');
-	}
+	/** ================ HELPER METHODS =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -34,13 +26,57 @@ class TodoStore extends EventEmitter {
 
 	/**
 	 * ----------------------------------------
+	 * Find a specific todo entry by `id`
+	 * ----------------------------------------
+	 */
+
+	findTodo(id) {
+		return this.todos.find(x => x.id == id);
+	}
+
+	/**
+	 * ----------------------------------------
+	 * Updates the localStorage object & 
+	 * emits a change event
+	 * ----------------------------------------
+	 */
+
+	updateStore() {
+		localStorage.setItem('todos', JSON.stringify(this.todos));
+		this.emit('change');
+	}
+
+	/**
+	 * ----------------------------------------
+	 * Formats a timestamp to associate with
+	 * a newly created todo
+	 * ----------------------------------------
+	 */
+
+	createTimestamp() {
+		const date = new Date();
+		const month = date.toLocaleString('en-US', { month: 'short' });
+		const day = date.toLocaleString('en-US', { day: '2-digit' });
+		const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+		const formatted = `${month} ${day} @ ${time}`;
+
+		const timeStamp = { date, month, day, time, formatted };
+
+		return timeStamp;
+	}
+
+
+	/** ================ ACTION METHODS =========================== */
+
+	/**
+	 * ----------------------------------------
 	 * Create a new todo
 	 * ----------------------------------------
 	 */
 
 	createTodo(text) {
-		const id = Date.now(), // placeholder
-			timeStamp = 'Feb 28, 10:00pm', // placeholder
+		const id = Date.now(), // reasonably unique for this demo
+			timeStamp = this.createTimestamp(),
 			completed = false;
 
 		this.todos.push({
@@ -50,7 +86,20 @@ class TodoStore extends EventEmitter {
 			completed
 		});
 
-		this.updateStore(this.todos);
+		this.updateStore();
+	}
+
+	/**
+	 * ----------------------------------------
+	 * Save an edited todo
+	 * ----------------------------------------
+	 */
+	
+	saveTodo(id, text) {
+		const todo = this.findTodo(id);
+		todo.text = text;
+
+		this.updateStore();
 	}
 
 	/**
@@ -60,12 +109,12 @@ class TodoStore extends EventEmitter {
 	 */
 
 	deleteTodo(id) {
-		let todo = this.todos.find(x => x.id == id);
-		let index = this.todos.indexOf(todo);
+		const todo = this.findTodo(id);
+		const index = this.todos.indexOf(todo);
 		
 		this.todos.splice(index, 1);
 
-		this.updateStore(this.todos);
+		this.updateStore();
 	}
 
 	/**
@@ -75,22 +124,22 @@ class TodoStore extends EventEmitter {
 	 */
 
 	changeTodoStatus(id, status) {
-		let todo = this.todos.find(x => x.id == id);
+		const todo = this.findTodo(id);
 		todo.completed = status;
 
-		this.updateStore(this.todos);
+		this.updateStore();
 	}
 
-	/**
-	 * ----------------------------------------
-	 * Direct events to the appropriate methods
-	 * ----------------------------------------
-	 */
+
+	/** ================ DISPATCHER JAZZ =========================== */
 
 	handleActions(action) {
 		switch(action.type) {
 			case 'CREATE_TODO':
 				this.createTodo(action.text);
+				break;
+			case 'SAVE_TODO':
+				this.saveTodo(action.id, action.text);
 				break;
 			case 'DELETE_TODO':
 				this.deleteTodo(action.id);
