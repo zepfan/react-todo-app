@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 
 class TodoItem extends Component {
-	placeCaretAtEnd(e) {
-		let temp_value = e.target.value;
-		e.target.value = '';
-		e.target.value = temp_value;
-	}
+
+	/** ================ LIFECYCLE =========================== */
 
 	componentDidUpdate() {
 		if(this.props.id == this.props.editing) {
@@ -13,8 +10,29 @@ class TodoItem extends Component {
 		}
 	}
 
+
+	/** ================ COMPONENT METHODS =========================== */	
+
+	handleKeyUp(e) {
+		if(e.keyCode == 13) { // "Enter" key
+			this.props.saveTodo(e.target.value);
+		}
+	}
+
+
+	/** ================ RENDER =========================== */
+
 	render() {
+
+		/**
+		 * ----------------------------------------
+		 * Determine if this component is currently
+		 * in edit mode
+		 * ----------------------------------------
+		 */
+		
 		let element = null;
+
 		if(this.props.id == this.props.editing) {
 			element = 
 				<div>
@@ -22,8 +40,8 @@ class TodoItem extends Component {
 						type="text"
 						ref="edit_input"
 						autoFocus
-						onFocus={this.placeCaretAtEnd}
-						onKeyUp={this.props.saveTodo}
+						onFocus={(e) => { let tmp = e.target.value; e.target.value = ''; e.target.value = tmp}} // places cursor at end of line
+						onKeyUp={this.handleKeyUp.bind(this)}
 						defaultValue={this.props.text} 
 					/>
 				</div>
@@ -34,8 +52,12 @@ class TodoItem extends Component {
 						onChange={this.props.changeTodoStatus} 
 						type="checkbox" 
 						id={this.props.id} 
-						defaultChecked={this.props.completed ? 'checked' : ''} />
-					<label for={this.props.id} >{this.props.text}</label>
+						defaultChecked={this.props.completed ? 'checked' : ''}
+					/>
+
+					<label for={this.props.id}>
+						{this.props.text}
+					</label>
 				</div>;
 		}
 

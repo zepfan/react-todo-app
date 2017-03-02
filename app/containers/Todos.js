@@ -5,7 +5,6 @@ import * as TodoActions from '../actions/TodoActions';
 import todoStore from '../stores/TodoStore';
 
 import AddTodoForm from '../components/AddTodoForm';
-import FilterTodos from '../components/FilterTodos';
 import TodoItem from '../components/TodoItem';
 
 class Todos extends Component {
@@ -29,7 +28,7 @@ class Todos extends Component {
 	}
 
 
-	/** ================ INITIALIZATION JAZZ =========================== */
+	/** ================ INITIALIZATION =========================== */
 
 	/**
 	 * ----------------------------------------
@@ -61,7 +60,7 @@ class Todos extends Component {
 	 * ----------------------------------------
 	 */
 
-	createTodo() {
+	createTodo(e) {
 		if(this.state.newTodo) {
 			TodoActions.createTodo(this.state.newTodo);
 
@@ -106,17 +105,12 @@ class Todos extends Component {
 	 * ----------------------------------------
 	 */
 	
-	saveTodo(e) {
-		let id = this.state.editId;
-		let text = e.target.value
+	saveTodo(text) {
+		TodoActions.saveTodo(this.state.editId, text);
 
-		if(e.keyCode == 13) { // "Enter" key
-			TodoActions.saveTodo(id, text);
-
-			this.setState({
-				editId: null
-			});
-		}
+		this.setState({
+			editId: null
+		});
 	}
 
 	/**
@@ -145,10 +139,17 @@ class Todos extends Component {
 	}
 
 
-	/** ================ RENDER FUNCTION =========================== */
+	/** ================ RENDER =========================== */
 
 	render() {
-		// do some .map magic
+		
+		/**
+		 * ----------------------------------------
+		 * Do some map magic to generate multiple
+		 * `TodoItem` components
+		 * ----------------------------------------
+		 */
+		
 		const TodoItems = this.state.todos.map((todo) => {
 			return <TodoItem 
 						key={todo.id} 
@@ -164,9 +165,10 @@ class Todos extends Component {
 
 		return (
 			<div>
-				<AddTodoForm createTodo={this.createTodo} setTodoText={this.setTodoText} />
-				
-				<FilterTodos />
+				<AddTodoForm 
+					createTodo={this.createTodo} 
+					setTodoText={this.setTodoText} 
+				/>
 
 				<div id="todo-container">
 					<ul>
