@@ -98,4 +98,16 @@ class TodoItem extends Component {
 	}
 }
 
+TodoItem.propTypes = {
+	id: React.PropTypes.number,
+	text: React.PropTypes.string,
+	completed: React.PropTypes.bool,
+	timeStamp: React.PropTypes.string,
+	changeTodoStatus: React.PropTypes.func,
+	editTodo: React.PropTypes.func,
+	saveTodo: React.PropTypes.func,
+	deleteTodo: React.PropTypes.func,
+	editing: React.PropTypes.number
+};
+
 export default TodoItem;
