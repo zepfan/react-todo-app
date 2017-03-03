@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 import TodoApp from './TodoApp';
-import Todos from './containers/Todos'
+import Todos from './containers/Todos';
 
 const app = document.getElementById('app');
 
